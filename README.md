@@ -2,10 +2,10 @@
 
 ## Equipe
 
-- **Integrante 1:** [Nome do Integrante 1]
-- **Integrante 2:** [Nome do Integrante 2]
-- **Integrante 3:** [Nome do Integrante 3]
-- **Integrante 4:** [Nome do Integrante 4]
+- **Integrante 1:** Bernardo Dal Piva Bernardi
+- **Integrante 2:** Gustavo Brunoni
+- **Integrante 3:** João Wictor Decarli
+- **Integrante 4:** José Gabriel dos Santos Paludo
 
 ## Descrição do Problema
 
