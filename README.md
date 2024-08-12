@@ -26,43 +26,75 @@ Após um acidente com o veículo do segurado, o processo de acionar a seguradora
 4. **Emissão de Boleto para Franquia:**
    - O segurado deve ter a opção no aplicativo da seguradora para emitir um boleto (código de barras ou QR Code) referente à franquia a ser paga.
 
-## Estrutura do Código
+### Código Fonte
 
-Abaixo está um exemplo básico de como o aplicativo da seguradora pode ser estruturado utilizando o framework Flask para uma aplicação web simples.
+O código está no arquivo `seguradora.cpp`. Abaixo está um resumo das principais funcionalidades:
 
-```python
-# app.py
-from flask import Flask, request, jsonify, send_file
-import random
-import string
+```cpp
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
 
-app = Flask(__name__)
+class AplicativoSeguradora {
+public:
+    void registrarBoletim(const std::string& boletim);
+    void emitirBoleto(double valorFranquia);
 
-# Função para gerar códigos de boletos
-def gerar_codigo_boleto():
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+private:
+    std::string gerarCodigoBoleto();
+};
 
-# Rota para notificar seguradora com o boletim de ocorrência
-@app.route('/notificar', methods=['POST'])
-def notificar():
-    data = request.json
-    boletim = data.get('boletim')
-    if boletim:
-        # Salvar dados e notificar a seguradora
-        # Aqui você pode adicionar lógica para salvar dados em um banco de dados
-        return jsonify({"message": f"Boletim de Ocorrência {boletim} registrado."}), 200
-    return jsonify({"message": "Boletim de Ocorrência não fornecido."}), 400
+void AplicativoSeguradora::registrarBoletim(const std::string& boletim) {
+    std::ofstream arquivo("boletim.txt");
+    if (arquivo.is_open()) {
+        arquivo << "Boletim de Ocorrência registrado: " << boletim << std::endl;
+        arquivo.close();
+        std::cout << "Boletim de Ocorrência " << boletim << " registrado com sucesso." << std::endl;
+    } else {
+        std::cerr << "Erro ao abrir o arquivo para registrar o boletim." << std::endl;
+    }
+}
 
-# Rota para gerar e emitir boleto
-@app.route('/emitir_boleto', methods=['POST'])
-def emitir_boleto():
-    data = request.json
-    valor_franquia = data.get('valor_franquia')
-    if valor_franquia:
-        codigo_boleto = gerar_codigo_boleto()
-        # Aqui você pode adicionar lógica para gerar e salvar o boleto
-        return jsonify({"boleto_codigo": codigo_boleto, "valor_franquia": valor_franquia}), 200
-    return jsonify({"message": "Valor da franquia não fornecido."}), 400
+void AplicativoSeguradora::emitirBoleto(double valorFranquia) {
+    std::string codigoBoleto = gerarCodigoBoleto();
+    std::ofstream arquivo("boleto.txt");
+    if (arquivo.is_open()) {
+        arquivo << "Código do Boleto: " << codigoBoleto << std::endl;
+        arquivo << "Valor da Franquia: R$ " << valorFranquia << std::endl;
+        arquivo.close();
+        std::cout << "Boleto emitido com sucesso." << std::endl;
+    } else {
+        std::cerr << "Erro ao abrir o arquivo para emitir o boleto." << std::endl;
+    }
+}
 
-if __name__ == '__main__':
-    app.run(debug=True)
+std::string AplicativoSeguradora::gerarCodigoBoleto() {
+    const std::string caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    std::string codigo;
+    srand(static_cast<unsigned>(time(0))); // Inicializa o gerador de números aleatórios
+
+    for (int i = 0; i < 12; ++i) {
+        codigo += caracteres[rand() % caracteres.length()];
+    }
+
+    return codigo;
+}
+
+int main() {
+    AplicativoSeguradora seguradora;
+    std::string boletim;
+    double valorFranquia;
+
+    // Entrada de dados do usuário
+    std::cout << "Digite o número do boletim de ocorrência: ";
+    std::getline(std::cin, boletim);
+    seguradora.registrarBoletim(boletim);
+
+    std::cout << "Digite o valor da franquia: R$ ";
+    std::cin >> valorFranquia;
+    seguradora.emitirBoleto(valorFranquia);
+
+    return 0;
+}
