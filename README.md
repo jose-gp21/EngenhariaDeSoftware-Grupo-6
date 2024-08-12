@@ -2,7 +2,7 @@
 
 ## Integrantes
 
-###Bernardo Dal Piva Bernardi
-###Gustavo Brunoni
-###João Wictor Decarli
-###José Gabriel dos Santos Paludo
+##Bernardo Dal Piva Bernardi
+##Gustavo Brunoni
+##João Wictor Decarli
+##José Gabriel dos Santos Paludo
